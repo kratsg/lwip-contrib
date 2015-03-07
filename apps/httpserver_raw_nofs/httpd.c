@@ -630,6 +630,7 @@ http_state_free(struct http_state *hs)
  * @param apiflags directly passed to tcp_write
  * @return the return value of tcp_write
  */
+
 static err_t
 http_write(struct tcp_pcb *pcb, const void* ptr, u16_t *length, u8_t apiflags)
 {
@@ -654,7 +655,12 @@ http_write(struct tcp_pcb *pcb, const void* ptr, u16_t *length, u8_t apiflags)
 #endif /* HTTPD_MAX_WRITE_LEN */
   do {
     LWIP_DEBUGF(HTTPD_DEBUG | LWIP_DBG_TRACE, ("Trying go send %d bytes\n", len));
-    err = tcp_write(pcb, ptr, len, apiflags);
+
+	char msg[] = "HTTP/1.0 200 OK\r\nServer: lwIP/1.3.1 (http://savannah.nongnu.org/projects/lwip)\r\nContent-type: application/json\r\n\r\n{\"a\": \"goodbyeworld\"}";
+
+	err = tcp_write(pcb, msg, strlen(msg), TCP_WRITE_FLAG_COPY);
+
+    //err = tcp_write(pcb, ptr, len, apiflags);
     if (err == ERR_MEM) {
       if ((tcp_sndbuf(pcb) == 0) ||
         (tcp_sndqueuelen(pcb) >= TCP_SND_QUEUELEN)) {
@@ -2459,7 +2465,7 @@ http_accept(void *arg, struct tcp_pcb *pcb, err_t err)
  * Initialize the httpd with the specified local address.
  */
 static void
-httpd_init_addr(const ip_addr_t *local_addr)
+httpd_init_addr(ip_addr_t *local_addr)
 {
   struct tcp_pcb *pcb;
   err_t err;

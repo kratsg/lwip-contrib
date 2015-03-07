@@ -35,7 +35,7 @@
 #include "fsdata.h"
 #include <string.h>
 
-/** Set this to 1 to include "fsdata_custom.c" instead of "fsdata.c" for the
+/** Set this to 1 to include "fsdata_custom.c" instead of "fsdata.inc" for the
  * file system (to prevent changing the file included in CVS) */
 #ifndef HTTPD_USE_CUSTOM_FSDATA
 #define HTTPD_USE_CUSTOM_FSDATA 0
@@ -44,7 +44,7 @@
 #if HTTPD_USE_CUSTOM_FSDATA
 #include "fsdata_custom.c"
 #else /* HTTPD_USE_CUSTOM_FSDATA */
-#include "fsdata.c"
+#include "fsdata.inc"
 #endif /* HTTPD_USE_CUSTOM_FSDATA */
 
 /*-----------------------------------------------------------------------------------*/
